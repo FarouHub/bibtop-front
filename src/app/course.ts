@@ -1,9 +1,10 @@
 export class Course {
-  id: number;
-  name: string;
-  description: string;
+  
+  title: string;
   date: string;
-  type: string;
-  distance: string;
-  img: string;
+  contact: string;
+  phone: string;
+  region: string;
+  lat: number;
+  long: number;
 }
