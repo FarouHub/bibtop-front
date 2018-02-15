@@ -3,11 +3,12 @@ import { Course } from './course';
 import { Ville } from './ville';
 import { Observable } from 'rxjs/Observable';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../environments/environment';
 
 @Injectable()
 export class CourseService {
 	
-  private coursesUrl = 'http://localhost:3000/courses';  // URL to web api
+  private coursesUrl = environment.api_url + 'courses';  // URL to web api
   
   getCourses(ville: Ville): Observable<Course[]>{
 
@@ -16,7 +17,6 @@ export class CourseService {
     if(ville){
       params += '?lat=' + ville.LAT + '&long=' + ville.LONG;
     }
-
 
     return this.http.get<Course[]>(this.coursesUrl + params )
   }
