@@ -15,13 +15,17 @@ export class CoursesComponent implements OnInit {
   //Coordonnees par defaut 
   search: Search = {
     ville: '',
-	lat: 47.738082,
-	long: 7.347932
+	  lat: 47.738082,
+	  long: 7.347932
   };
   
-  ville: Ville;
+  ville: Ville = {
+    LAT: 47.738082,
+    LONG: 7.347932,
+    FULL_NAME_RO: 'Mulhouse'
+  };
  
-  positions = [];
+  markers = [];
 
   courses: Course[];
 
@@ -30,13 +34,23 @@ export class CoursesComponent implements OnInit {
   ngOnInit() {
     this.getCourses();
   }
+
+  updateSearch(changedCenter){
+    this.ville.LAT = changedCenter.lat;
+    this.ville.LONG = changedCenter.lng;
+  }
+
+  mapDragEnd() {
+    console.log('mapDragEnd');
+    this.getCourses();
+  }
   
   getCourses(): void {
     this.courseService.getCourses(this.ville).subscribe(courses => {
-		
+      this.markers = [];
       let i = 0;
       for(let tmpcourse of courses){
-        this.positions[i] = {lat: tmpcourse.lat , lng: tmpcourse.long};
+        this.markers[i] = {lat: tmpcourse.lat , lng: tmpcourse.long, title: tmpcourse.title};
         i++;
       }
       
@@ -45,15 +59,12 @@ export class CoursesComponent implements OnInit {
   }
   
   getVille(): void {
-	  
 	  this.villeService.getVille(this.search.ville).subscribe(ville => {
-		this.search.ville = ville[0].FULL_NAME_RO;
-		this.search.lat = ville[0].LAT;
-		this.search.long = ville[0].LONG;
-		console.log(ville[0]);
-    this.ville = ville[0];
-    
-    this.getCourses();
+      this.search.ville = ville[0].FULL_NAME_RO;
+      this.search.lat = ville[0].LAT;
+      this.search.long = ville[0].LONG;
+      this.ville = ville[0];
+      this.getCourses();
 	  });
   }
 

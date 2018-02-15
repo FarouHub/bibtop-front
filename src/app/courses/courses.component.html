@@ -6,24 +6,22 @@
   
   <form class="form-inline">
     <div class="input-group popper">
-      <span class="input-group-addon" id="basic-addon1"><img src="assets/images/icon_search.png" width="20" (click)="getVille()" /></span>
-      <input id="dropdownMenuLink" [(ngModel)]="search.ville" name="ville" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" type="text" class="form-control form-control-lg" size="30" placeholder="Essayer &laquo; Trail à Mulhouse &raquo;" />
-       <div class="dropdown-menu">
-		
-		<div class="card border-0">
-		  <div class="card-body">
-			<h5 class="card-title">Découvrez les courses</h5>
-			<!--h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6-->
-			<p class="card-text">
-				<button type="button" class="btn btn-outline-secondary">Tout</button>
-				<button type="button" class="btn btn-outline-secondary">Trail</button>
-				<button type="button" class="btn btn-outline-secondary">Course</button>
-			</p>
-			
-		  </div>
-		</div>
-	   </div>
-	</div>
+      <span class="input-group-addon" style="background-color: #fff" id="basic-addon1"><img src="assets/images/icon_search.png" width="20"/></span>
+      <input id="dropdownMenuLink" [(ngModel)]="search.ville" name="ville" (keyup)="getVille()" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" type="text" class="form-control form-control-lg" size="30" placeholder="Essayer &laquo; Mulhouse &raquo;" />
+      <div class="dropdown-menu">
+        <div class="card border-0">
+          <div class="card-body">
+            <h5 class="card-title">Découvrez les courses</h5>
+            <!--h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6-->
+            <p class="card-text">
+              <button type="button" class="btn btn-outline-secondary">Tout</button>
+              <button type="button" class="btn btn-outline-secondary">Trail</button>
+              <button type="button" class="btn btn-outline-secondary">Course</button>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
   </form>
     
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsingNavbar2">
@@ -59,7 +57,7 @@
         <div class="card mb-2 border-0" style="width: 20rem;">
 		  <img class="card-img-top" src="assets/images/cover/running{{course.random}}.jpg" alt="Card image cap">
           <div class="card-body pl-1 pt-0 pb-2">
-            <p class="m-0 p-0"><small>{{ course.date }}</small></p>
+            <p class="m-0 p-0"><small>{{ course.date | date :  "dd/MM/y" }}</small></p>
             <h6 class="card-title m-0 p-0"><a routerLink="/courses/{{course._id}}">{{ course.title }}</a></h6>
             <p class="card-text p-0"><small>{{ course.commune }}</small></p>
           </div>
@@ -70,8 +68,12 @@
   <div class="d-none d-sm-block col-lg-4">
     <div class="row w-100">
       <div class="col col-lg-12">
-        <agm-map [latitude]="search.lat" [longitude]="search.long" [zoom]="10" [usePanning]="true">
-          <agm-marker *ngFor="let data of positions" [latitude]="data.lat" [longitude]="data.lng"></agm-marker>
+        <agm-map [latitude]="search.lat" [longitude]="search.long" [zoom]="10" [usePanning]="true" (centerChange)="updateSearch($event)" (idle)="mapDragEnd()">
+          <agm-marker *ngFor="let data of markers" [latitude]="data.lat" [longitude]="data.lng">
+            <agm-info-window>
+              <strong>{{data.title}}</strong>
+            </agm-info-window>
+          </agm-marker>
         </agm-map>
       </div>
     </div>
