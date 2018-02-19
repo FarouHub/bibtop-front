@@ -1,7 +1,8 @@
 export class Search {
   
-  ville: string;
-  lat: number;
-  long: number;
+  ville: String;
+  lat: Number;
+  long: Number;
+  zoom: Number;
 
 }

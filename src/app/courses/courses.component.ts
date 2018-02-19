@@ -1,8 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Course } from '../course';
+import { ActivatedRoute } from '@angular/router';
+import { Epreuve } from '../epreuve';
 import { Search } from '../search';
 import { Ville } from '../ville';
-import { CourseService } from '../course.service';
+import { EpreuveService } from '../epreuve.service';
 import { VilleService } from '../ville.service';
 
 @Component({
@@ -10,61 +11,71 @@ import { VilleService } from '../ville.service';
   templateUrl: './courses.component.html',
   styleUrls: ['./courses.component.css']
 })
+
 export class CoursesComponent implements OnInit {
   
   //Coordonnees par defaut 
   search: Search = {
     ville: '',
-	  lat: 47.738082,
-	  long: 7.347932
+	  lat: 48.866,
+    long: 2.333,
+    zoom: 6
   };
-  
-  ville: Ville = {
-    LAT: 47.738082,
-    LONG: 7.347932,
-    FULL_NAME_RO: 'Mulhouse'
-  };
- 
+
   markers = [];
 
-  courses: Course[];
+  epreuves: Epreuve[];
 
-  constructor(private courseService: CourseService, private villeService: VilleService) { }
+  constructor(
+    private epreuveService: EpreuveService, 
+    private villeService: VilleService,
+    private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.getCourses();
+    let searchRequest = this.route.snapshot.paramMap.get('search');
+    if(searchRequest){
+      this.search.ville = searchRequest;
+      this.search.zoom = 10;
+      this.getFindPosition();
+    }
+   
+    this.getEpreuves();
   }
 
   updateSearch(changedCenter){
-    this.ville.LAT = changedCenter.lat;
-    this.ville.LONG = changedCenter.lng;
+    this.search.lat = changedCenter.lat;
+    this.search.long = changedCenter.lng;
+  }
+
+  updateZoom(changedZoom){
+    this.search.zoom = changedZoom;
   }
 
   mapDragEnd() {
-    console.log('mapDragEnd');
-    this.getCourses();
+    //console.log('mapDragEnd');
+    this.getEpreuves();
   }
   
-  getCourses(): void {
-    this.courseService.getCourses(this.ville).subscribe(courses => {
+  getEpreuves(): void {
+    this.epreuveService.getEpreuves(this.search).subscribe(epreuves => {
       this.markers = [];
       let i = 0;
-      for(let tmpcourse of courses){
-        this.markers[i] = {lat: tmpcourse.lat , lng: tmpcourse.long, title: tmpcourse.title};
+      for(let tmpEpreuve of epreuves){
+        this.markers[i] = {lat: tmpEpreuve.lat , lng: tmpEpreuve.long, title: tmpEpreuve.title};
         i++;
       }
       
-      this.courses = courses
+      this.epreuves = epreuves;
 	  });
   }
   
-  getVille(): void {
+  getFindPosition(): void {
 	  this.villeService.getVille(this.search.ville).subscribe(ville => {
       this.search.ville = ville[0].FULL_NAME_RO;
       this.search.lat = ville[0].LAT;
       this.search.long = ville[0].LONG;
-      this.ville = ville[0];
-      this.getCourses();
+      this.search.zoom = 10;
+      this.getEpreuves();
 	  });
   }
 

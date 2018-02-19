@@ -1,23 +1,21 @@
 export class Price {
-  prix: Number;
-  date: Date;
-  type: String;
+    prix: Number;
+    date: Date;
+    type: String;
 }
 
-
-export class Epreuve {
+export class SubEpreuve {
+  title: String;
+  start_date: Date;
   name: String;
   type: String;
   description: String;
   distance: Number;
   maxinscription: Number;
-  prices: Price[];
 }
-
-export class Course {
   
+export class Epreuve {
   title: String;
-  date: String;
   contact: String;
   commune: String;
   urlid: String;
@@ -27,5 +25,12 @@ export class Course {
   region: String;
   lat: Number;
   long: Number;
-  epreuves: Epreuve[];
+  epreuves: SubEpreuve[];
+  name: String;
+  type: String;
+  description: String;
+  distance: Number;
+  maxinscription: Number;
+  prices: Price[];
 }
+  

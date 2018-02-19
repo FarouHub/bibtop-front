@@ -1,0 +1,69 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<nav class="navbar navbar-light navbar-expand-md bg-light justify-content-between">
+  <a class="navbar-brand" href="/">
+    <img src="assets/images/brand.png" width="35" height="35" class="d-inline-block align-top" alt="Logo">
+  </a>
+ 
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsingNavbar2">
+      <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="navbar-collapse collapse justify-content-between" id="collapsingNavbar2">
+      <div class="mr-auto"><!--placeholder to evenly space flexbox items and center links--></div>
+      <ul class="navbar-nav">
+          <li class="nav-item">
+              <a class="nav-link text-success" href="#">Organisateur</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" routerLink="/courses" href="#">Courses</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="#">Résultats</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="#">Aide</a>
+          </li>
+      </ul>
+  </div>
+</nav>
+
+<div class="container h-100 mx-auto">
+  <div class="row h-100 align-items-center">
+    <div class="col">
+      <div class="row">
+        <h1 class="bd-title text-primary">BibTop</h1>
+      </div>
+      <div class="row" style="width: 60%">
+        <h1 class="bd-title text-secondary">Rechercher les épreuves de courses à pieds autour de chez vous</h1>
+      </div>
+      <div class="row">
+        <div class="col">
+          <form class="form-inline" method="GET" (submit)="onSubmit()">
+            <div class="input-group popper">
+              <div class="input-group-addon" style="background-color: #fff" id="basic-addon1"><img src="assets/images/icon_search.png" width="20"/></div>
+              <input id="dropdownMenuLink" [(ngModel)]="search" name="search" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" type="text" class="form-control form-control-lg" size="60" placeholder="Essayer &laquo; Mulhouse &raquo;" />
+              <div class="input-group-btn" id="basic-append1"><button class="btn btn-outline-primary" type="button" (click)="onSubmit()">Rechercher</button></div>
+              <div class="dropdown-menu">
+                <div class="card border-0">
+                  <div class="card-body">
+                    <h5 class="card-title">Découvrez les courses</h5>
+                    <p class="card-text">
+                      <button type="button" class="btn btn-outline-secondary">Tout</button>
+                      <button type="button" class="btn btn-outline-secondary">Trail</button>
+                      <button type="button" class="btn btn-outline-secondary">Course</button>
+                      <button type="button" class="btn btn-outline-secondary">Bike &amp; Run</button>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+

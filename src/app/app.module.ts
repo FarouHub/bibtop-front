@@ -12,12 +12,15 @@ import { AppRoutingModule } from './/app-routing.module';
 
 import { CourseService } from './course.service';
 import { VilleService } from './ville.service';
+import { EpreuveService } from './epreuve.service';
+import { WelcomeComponent } from './welcome/welcome.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CoursesComponent,
-    CourseDetailComponent
+    CourseDetailComponent,
+    WelcomeComponent
   ],
   imports: [
     BrowserModule,
@@ -29,7 +32,7 @@ import { VilleService } from './ville.service';
       apiKey: 'AIzaSyA6REJYcsSxFC67wsYjO_1aKbfxDGcKKCk'
     })
   ],
-  providers: [CourseService, VilleService],
+  providers: [CourseService, VilleService, EpreuveService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

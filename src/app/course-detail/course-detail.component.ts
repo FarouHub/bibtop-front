@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Course } from '../course';
-import { CourseService } from '../course.service';
+import { Epreuve } from '../epreuve';
+import { EpreuveService } from '../epreuve.service';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 
@@ -11,21 +11,21 @@ import { Location } from '@angular/common';
 })
 export class CourseDetailComponent implements OnInit {
 	
-  course: Course;
+  epreuve: Epreuve;
 
   constructor(
-    private courseService: CourseService, 
-	private route: ActivatedRoute,
-	private location: Location) { }
+    private epreuveService: EpreuveService, 
+	  private route: ActivatedRoute,
+	  private location: Location) { }
 
   ngOnInit() {
-	  this.getCourse();
+	  this.getEpreuve();
   }
-  
-  getCourse(): void {
+
+  getEpreuve(): void {
     const id = this.route.snapshot.paramMap.get('id');
-	console.log('id:' + id);
-    this.courseService.getCourse(id).subscribe(course => this.course = course);
+	//console.log('id:' + id);
+    this.epreuveService.getEpreuve(id).subscribe(epreuve => this.epreuve = epreuve);
   }
 
 }

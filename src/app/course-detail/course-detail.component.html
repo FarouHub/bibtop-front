@@ -1,12 +1,12 @@
 <nav class="navbar navbar-light navbar-expand-md bg-light justify-content-between">
-    <a class="navbar-brand" href="#">
+    <a class="navbar-brand" href="/">
       <img src="assets/images/brand.png" width="35" height="35" class="d-inline-block align-top" alt="Logo">
     </a>
 
     <form class="form-inline">
         <div class="input-group popper">
             <span class="input-group-addon" style="background-color: #fff" id="basic-addon1"><img src="assets/images/icon_search.png" width="20"/></span>
-            <input id="dropdownMenuLink" name="ville" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" type="text" class="form-control form-control-lg" size="30" placeholder="Rechercher" />
+            <input disabled="true" id="dropdownMenuLink" name="ville" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" type="text" class="form-control form-control-lg" size="30" placeholder="Rechercher" />
             <div class="dropdown-menu">
                 <div class="card border-0">
                     <div class="card-body">
@@ -16,6 +16,7 @@
                             <button type="button" class="btn btn-outline-secondary">Tout</button>
                             <button type="button" class="btn btn-outline-secondary">Trail</button>
                             <button type="button" class="btn btn-outline-secondary">Course</button>
+                            <button type="button" class="btn btn-outline-secondary">Bike &amp; Run</button>
                         </p>
                     </div>
                 </div>
@@ -29,6 +30,9 @@
     <div class="navbar-collapse collapse justify-content-between" id="collapsingNavbar2">
         <div class="mr-auto"><!--placeholder to evenly space flexbox items and center links--></div>
         <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link text-success" href="#">Organisateur</a>
+            </li>
             <li class="nav-item active">
                 <a class="nav-link" routerLink="/courses" href="#">Courses</a>
             </li>
@@ -39,66 +43,84 @@
                 <a class="nav-link" href="#">Aide</a>
             </li>
         </ul>
-        <ul class="nav navbar-nav flex-row">
-            <li class="nav-item"><a class="nav-link" href=""><i class="fa fa-facebook"></i></a></li>
-            <li class="nav-item"><a class="nav-link" href=""><i class="fa fa-twitter"></i></a></li>
-        </ul>
     </div>
-    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Organisateur</button>
 </nav>
 
 <div class="container">
     <div class="row">
         <div class="col-xs-8 col-lg-8">
-            
-            <h2>{{ course.title }}</h2>
-            <h5>{{ course.commune }} <small> / {{ course.start_date | date :  "dd/MM/y" }}</small></h5>
+            {{ epreuve.type }}
+            <h2>{{ epreuve.title }}</h2>
+            <h5>{{ epreuve.commune }} </h5>
+            Date: <small> / {{ epreuve.start_date | date :  "dd/MM/y" }}</small>
         </div>
     </div>
     <div class="row">
         <div class="col-xs-8 col-lg-8">
-            <table class="table">
-                <thead class="thead-dark">
-                    <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Type</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">Distance</th>
-                    <th scope="col">Max</th>
-                    <th scope="col">Prix</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let epreuve of course.epreuves">
-                    <td>{{ epreuve.name }}</td>
-                    <td>{{ epreuve.type }}</td>
-                    <td>{{ epreuve.description }}</td>
-                    <td>{{ epreuve.distance }}</td>
-                    <td>{{ epreuve.maxinscription }}</td>
-                    <td>
-                        <span *ngFor="let price of epreuve.prices">
-                        
-                            <span *ngIf="price.type == 'all'">{{ price.prix }} € </span>
-                            <span *ngIf="price.type == 'licence'">{{ price.prix }} € (FFA)</span>
-
-                            <span *ngIf="price.type == 'all_day'">{{ price.prix }} € (sur place)</span>
-                            <span *ngIf="price.type == 'licence_day'">{{ price.prix }} € (FFA sur place)</span>
-
-                        </span>
-                    </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="row">
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Distance</th>
+                            <th scope="col">Max</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ epreuve.name }}</td>
+                            <td>{{ epreuve.type }}</td>
+                            <td>{{ epreuve.description }}</td>
+                            <td>{{ epreuve.distance }}</td>
+                            <td>{{ epreuve.maxinscription }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <p class="h5">Autre epreuve lié à cette évènement</p>
+                    <div class="row">
+                        <div class="col-sm-4" *ngFor="let linkepreuve of epreuve.epreuves">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ linkepreuve.name }}</h5>
+                                    <p class="card-text">Distance {{ linkepreuve.distance }}</p>
+                                    <a href="/courses/{{linkepreuve._id}}" class="btn btn-outline-primary">Explorer</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="col-xs-2 col-lg-2">
-            <div class="card text-white bg-dark" style="width: 18rem;">
+            <div class="card bg-dark" style="width: 18rem;">
                 <div class="card-body">
-                    <h5 class="card-title">Contact</h5>
+                    <h5 class="card-title text-white">Inscription</h5>
                 </div>
                 <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <ul class="list-group">
+                            <li class="list-group-item" *ngFor="let price of epreuve.prices">
+                                <span *ngIf="price.type == 'all'">{{ price.prix }} € </span>
+                                <span *ngIf="price.type == 'licence'">{{ price.prix }} € (FFA)</span>
+                                <span *ngIf="price.type == 'all_day'">{{ price.prix }} € (sur place)</span>
+                                <span *ngIf="price.type == 'licence_day'">{{ price.prix }} € (FFA sur place)</span>
+                            </li>
+                        </ul>
+                        <!--ul class="list-group">
+                            <li class="list-group-item">
+                                <span>Prix: N/C</span>
+                            </li>
+                        </ul-->
+
+                    </li>
                     <li class="list-group-item"><button class="btn btn-success my-2 my-sm-0" type="submit">Poser votre question</button></li>
-                    <li class="list-group-item"><a href="{{ course.urlid }}" class="card-link">Site partenaire</a></li>
-                    <li class="list-group-item"><a href="{{ course.url_club }}" class="card-link">Site de l'épreuve</a></li>
+                    <li class="list-group-item"><a href="{{ epreuve.urlid }}" class="card-link">Site partenaire</a></li>
+                    <li class="list-group-item"><a href="{{ epreuve.url_club }}" class="card-link">Site de l'épreuve</a></li>
                 </ul>
             </div>
         </div>
