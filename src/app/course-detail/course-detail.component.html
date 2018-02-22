@@ -49,45 +49,60 @@
 <div class="container">
     <div class="row">
         <div class="col-xs-8 col-lg-8">
-            {{ epreuve.type }}
-            <h2>{{ epreuve.title }}</h2>
-            <h5>{{ epreuve.commune }} </h5>
-            Date: <small> / {{ epreuve.start_date | date :  "dd/MM/y" }}</small>
+            <span class="text-primary"><strong>{{ epreuve.type }}</strong></span>
+
+            <h2>{{ epreuve.name }} <small>({{ epreuve.start_date | date :  "dd/MM/y" }})</small></h2>
+            <h5 class="text-secondary">{{ epreuve.commune }} </h5>
         </div>
     </div>
     <div class="row">
-        <div class="col-xs-8 col-lg-8">
-            <div class="row">
-                <table class="table">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Type</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Distance</th>
-                            <th scope="col">Max</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>{{ epreuve.name }}</td>
-                            <td>{{ epreuve.type }}</td>
-                            <td>{{ epreuve.description }}</td>
-                            <td>{{ epreuve.distance }}</td>
-                            <td>{{ epreuve.maxinscription }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="row">
+        <div class="col-xs-8 col-lg-8">            
+            <div class="row mb-3">
                 <div class="col">
-                    <p class="h5">Autre epreuve lié à cette évènement</p>
+                    <hr/>
+                    <span *ngIf="epreuve.description == null">Pas de description de disponible.</span>
+                    {{ epreuve.description }}
+                </div>
+            </div>
+            <div class="row mb-3">
+                    <div class="col">
+                        <p class="h5">Distance</p>
+                        <hr/>
+                        {{ epreuve.distance }} km
+                    </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <p class="h5">Max Inscription</p>
+                    <hr/>
+                    {{ epreuve.maxinscription }} personnes
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <p class="h5">Récompense</p>
+                    <hr/>
+                    {{ epreuve.recompense }}
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <p class="h5">Service</p>
+                    <hr/>
+                    {{ epreuve.service }}
+                </div>
+            </div>
+            <div class="row" *ngIf="hasEpreuves()">
+                <div class="col">
+                    <p class="h5" *ngIf="epreuve.epreuves.length == 1">Autre épreuve liée à cet événement</p>
+                    <p class="h5" *ngIf="epreuve.epreuves.length > 1">Autres épreuves liées à cet événement</p>
+                    <hr/>
                     <div class="row">
                         <div class="col-sm-4" *ngFor="let linkepreuve of epreuve.epreuves">
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title">{{ linkepreuve.name }}</h5>
-                                    <p class="card-text">Distance {{ linkepreuve.distance }}</p>
+                                    <p class="card-text">Distance {{ linkepreuve.distance }} km</p>
                                     <a href="/courses/{{linkepreuve._id}}" class="btn btn-outline-primary">Explorer</a>
                                 </div>
                             </div>
@@ -103,24 +118,23 @@
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
-                        <ul class="list-group">
-                            <li class="list-group-item" *ngFor="let price of epreuve.prices">
-                                <span *ngIf="price.type == 'all'">{{ price.prix }} € </span>
-                                <span *ngIf="price.type == 'licence'">{{ price.prix }} € (FFA)</span>
-                                <span *ngIf="price.type == 'all_day'">{{ price.prix }} € (sur place)</span>
-                                <span *ngIf="price.type == 'licence_day'">{{ price.prix }} € (FFA sur place)</span>
+                        <ul class="list-group" *ngIf="hasPrices() && epreuve.prices.length > 1">
+                            <li class="list-group-item border-0" *ngFor="let price of epreuve.prices">
+                                <span *ngIf="price.type == 'all'">Prix: {{ price.prix }} € </span>
+                                <span *ngIf="price.type == 'licence'">Prix FFA: {{ price.prix }} €</span>
+                                <span *ngIf="price.type == 'all_day'">Prix: {{ price.prix }} € (sur place)</span>
+                                <span *ngIf="price.type == 'licence_day'">Prix FFA: {{ price.prix }} € (sur place)</span>
                             </li>
                         </ul>
-                        <!--ul class="list-group">
-                            <li class="list-group-item">
+                        <ul class="list-group" *ngIf="!hasPrices() || epreuve.prices.length == 0">
+                            <li class="list-group-item border-0">
                                 <span>Prix: N/C</span>
                             </li>
-                        </ul-->
-
+                        </ul>
                     </li>
                     <li class="list-group-item"><button class="btn btn-success my-2 my-sm-0" type="submit">Poser votre question</button></li>
                     <li class="list-group-item"><a href="{{ epreuve.urlid }}" class="card-link">Site partenaire</a></li>
-                    <li class="list-group-item"><a href="{{ epreuve.url_club }}" class="card-link">Site de l'épreuve</a></li>
+                    <li class="list-group-item" *ngIf="epreuve.url_club"><a href="{{ epreuve.url_club }}" target="_blank" class="card-link">Site de l'épreuve</a></li>
                 </ul>
             </div>
         </div>

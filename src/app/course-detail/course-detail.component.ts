@@ -28,4 +28,17 @@ export class CourseDetailComponent implements OnInit {
     this.epreuveService.getEpreuve(id).subscribe(epreuve => this.epreuve = epreuve);
   }
 
+  hasEpreuves(){
+    if(typeof this.epreuve != 'undefined' && typeof this.epreuve.epreuves != 'undefined'){
+      return true;
+    }
+    return false;
+  }
+
+  hasPrices(){
+    if(typeof this.epreuve != 'undefined' && typeof this.epreuve.prices != 'undefined'){
+      return true;
+    }
+    return false;
+  }
 }

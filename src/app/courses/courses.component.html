@@ -5,53 +5,116 @@
   </a>
   
   <form class="form-inline">
-    <div class="input-group popper">
+    <div class="input-group">
       <span class="input-group-addon" style="background-color: #fff" id="basic-addon1"><img src="assets/images/icon_search.png" width="20"/></span>
-      <input id="dropdownMenuLink" [(ngModel)]="search.ville" name="ville" (ngModelChange)="getFindPosition()" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" type="text" class="form-control form-control-lg" size="30" placeholder="Essayer &laquo; Mulhouse &raquo;" />
-      <div class="dropdown-menu">
-        <div class="card border-0">
-          <div class="card-body">
-            <h5 class="card-title">Découvrez les courses</h5>
-            <!--h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6-->
-            <p class="card-text">
-              <button type="button" class="btn btn-outline-secondary">Tout</button>
-              <button type="button" class="btn btn-outline-secondary">Trail</button>
-              <button type="button" class="btn btn-outline-secondary">Course</button>
-              <button type="button" class="btn btn-outline-secondary">Bike &amp; Run</button>
-            </p>
-          </div>
-        </div>
-      </div>
+      <input id="searchInput" [(ngModel)]="search.input" name="input" (ngModelChange)="getFindPosition()" type="text" class="form-control form-control-lg" size="30" placeholder="Essayer &laquo; Mulhouse &raquo;" />
     </div>
   </form>
-    
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsingNavbar2">
-      <span class="navbar-toggler-icon"></span>
-  </button>
+  
   <div class="navbar-collapse collapse justify-content-between" id="collapsingNavbar2">
-      <div class="mr-auto"><!--placeholder to evenly space flexbox items and center links--></div>
-      <ul class="navbar-nav">
-        <li class="nav-item">
-            <a class="nav-link text-success" href="#">Organisateur</a>
-        </li>
-        <li class="nav-item active">
-            <a class="nav-link" routerLink="/courses" href="#">Courses</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">Résultats</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">Aide</a>
-        </li>
-      </ul>
+    <div class="mr-auto"><!--placeholder to evenly space flexbox items and center links--></div>
+    <ul class="navbar-nav">
+      <li class="nav-item">
+          <a class="nav-link text-success" href="#">Organisateur</a>
+      </li>
+      <li class="nav-item active">
+          <a class="nav-link" routerLink="/courses" href="#">Courses</a>
+      </li>
+      <li class="nav-item">
+          <a class="nav-link" href="#">Résultats</a>
+      </li>
+      <li class="nav-item">
+          <a class="nav-link" href="#">Aide</a>
+      </li>
+    </ul>
   </div>
 </nav>
 
-<div class="bg-light border border-muted border-right-0 border-left-0 w-100 pt-2 pb-2">
+<div class="bg-light border border-muted border-right-0 border-left-0 w-100 pt-2 pb-2 pl-5">
   <form class="form-inline align-middle">
-      <button type="submit" class="btn btn-outline-primary p-0 pl-3 pr-3 ml-3">Dates</button>
-      <button type="submit" class="btn btn-outline-primary p-0 pl-3 pr-3 ml-3">Distance</button>
-      <button type="submit" class="btn btn-outline-primary p-0 pl-3 pr-3 ml-3">Prix</button>
+    <div>
+      <button *ngIf="!(search.types.trail || search.types.cross || search.types.route || search.types.bikeandrun)" id="filter-type" type="submit" class="btn btn-outline-primary p-0 pl-3 pr-3 ml-3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Type</button>
+      <button *ngIf="search.types.trail || search.types.cross || search.types.route || search.types.bikeandrun" id="filter-type" type="submit" class="btn btn-primary p-0 pl-3 pr-3 ml-3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span *ngIf="search.types.trail">Trail</span>
+        <span *ngIf="search.types.cross">Cross</span>
+        <span *ngIf="search.types.route">Route</span>
+        <span *ngIf="search.types.bikeandrun">B&amp;R</span>
+      </button>
+      <div id="dropdown-filter-type" class="dropdown-menu" aria-labelledby="filter-type">
+        <h6 class="dropdown-header">Type de course</h6>
+          <div class="form-check dropdown-item">
+            <mat-checkbox name="checkbox-trail" [(ngModel)]="search.types.trail" align="start">Trail</mat-checkbox>
+          </div>
+          <div class="form-check dropdown-item">
+              <mat-checkbox name="checkbox-cross" [(ngModel)]="search.types.cross" align="start">Cross</mat-checkbox>
+          </div>
+          <div class="form-check dropdown-item">
+              <mat-checkbox name="checkbox-route" [(ngModel)]="search.types.route" align="start">Route</mat-checkbox>
+          </div>
+          <div class="form-check dropdown-item">
+              <mat-checkbox name="checkbox-bikeandrun" [(ngModel)]="search.types.bikeandrun" align="start">Bike &amp; Run</mat-checkbox>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary px-0" (click)="cleanTypeFilter()">Effacer</button>
+              <button type="button" class="btn btn-primary px-0" (click)="refrechSearch()">Appliquer</button>
+            </div>
+      </div>
+    </div>
+    <div>
+      <button *ngIf="search.start_date == null && search.end_date == null" id="filter-date" type="submit" class="btn btn-outline-primary p-0 pl-3 pr-3 ml-3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dates</button>
+      <button *ngIf="search.start_date != null || search.end_date != null" id="filter-date2" type="submit" class="btn btn-primary p-0 pl-3 pr-3 ml-3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Dates <span *ngIf="search.start_date != null">{{ search.start_date | date: "dd/MM"}}</span><span *ngIf="search.start_date != null && search.end_date != null"> - </span><span *ngIf="search.end_date != null">{{ search.end_date | date: "dd/MM"}}</span>
+      </button>
+      <div class="dropdown-menu">
+        <div class="row">
+          <div class="col">
+            <div class="card border-0">
+              <div class="card-body">
+                <h5 class="card-title">Start Date</h5>
+                <mat-form-field>
+                  <input matInput [matDatepicker]="startDatePicker" placeholder="Choose a date" name="start_date" [(ngModel)]="search.start_date">
+                  <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+                  <mat-datepicker #startDatePicker></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card border-0">
+              <div class="card-body">
+                <h5 class="card-title">End Date</h5>
+                <mat-form-field>
+                  <input matInput [matDatepicker]="endDatePicker" placeholder="Choose a date" name="end_date" [(ngModel)]="search.end_date">
+                  <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+                  <mat-datepicker #endDatePicker></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary px-0" (click)="cleanDateFilter()">Effacer</button>
+          <button type="button" class="btn btn-primary px-0" (click)="refrechSearch()">Appliquer</button>
+        </div>
+      </div>
+    </div>
+    <div>
+      <button *ngIf="search.distance.max != search.distance.value" id="filter-distance" type="submit" class="btn btn-primary p-0 pl-3 pr-3 ml-3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Distance: Max {{search.distance.value}}</button>
+      <button *ngIf="search.distance.max == search.distance.value" id="filter-distance" type="submit" class="btn btn-outline-primary p-0 pl-3 pr-3 ml-3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Distance</button>
+      <div class="dropdown-menu">
+          <h6 class="dropdown-header">Distance</h6>
+          <div class="px-5">
+              <mat-slider name="distance-filter" [min]="search.distance.min" [max]="search.distance.max" [step]="search.distance.step" [(ngModel)]="search.distance.value" thumb-label="true"></mat-slider>       
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary px-0" (click)="cleanDistanceFilter()">Effacer</button>
+            <button type="button" class="btn btn-primary px-0" (click)="refrechSearch()">Appliquer</button>
+          </div>
+      </div>
+    </div>    
+    <!--div>
+        <button type="submit" class="btn btn-outline-primary p-0 pl-3 pr-3 ml-3">Prix</button>
+    </div-->
   </form>
 </div>
 
@@ -87,7 +150,5 @@
   </div>
 </div>
 </div>
-
-
 
 

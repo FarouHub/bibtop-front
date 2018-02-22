@@ -1,7 +1,7 @@
 export class Ville {
   
-  FULL_NAME_RO: string;
-  LAT: number;
-  LONG: number;
+  FULL_NAME_RO: String;
+  LAT: Number;
+  LONG: Number;
 
 }

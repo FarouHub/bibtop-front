@@ -16,7 +16,6 @@ export class WelcomeComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.search);
     this.router.navigate(['/courses', 'search', this.search]);
   }
 
