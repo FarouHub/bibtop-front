@@ -1,8 +1,45 @@
 agm-map {
-  height: 850px;
+  height: 800px;
   width: 100%;
 }
 
 mat-slider {
   width: 300px;
+}
+
+.mat_check {
+  margin: 0 5px;
+}
+
+@media (min-width: 520px) {
+  .margin-menu-height {
+    margin-top: 110px !important;
+  }
+}
+
+.margin-menu-height-sm {
+  margin-top: 160px;
+}
+
+.form_addon_border {
+  border: 1px solid #ced4da !important;
+  border-right: 0 !important;
+  border-bottom-left-radius: 0.25rem;
+  border-top-left-radius: 0.25rem;
+}
+
+@media (min-width: 992px) {
+  .d-lg-fixed {
+    position: fixed;
+    right: 0 !important;
+    height: 110px;
+  }
+}
+
+@media (min-width: 768px) {
+  .d-md-fixed {
+    position: fixed;
+    right: 0 !important;
+    height: 110px;
+  }
 }

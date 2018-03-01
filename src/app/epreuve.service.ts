@@ -24,8 +24,8 @@ export class EpreuveService {
       if(search.end_date != null){
         params += '&end_date=' + new DatePipe('en').transform(search.end_date, "y-MM-dd");
       }
-      if(search.distance.value != search.distance.max){
-        params += '&distance=' + search.distance.value;
+      if(search.distance.valueMax != search.distance.max){
+        params += '&distance=' + search.distance.valueMax;
       }
       if(search.types.bikeandrun){
         params += '&bikeandrun=BikeAndRun';

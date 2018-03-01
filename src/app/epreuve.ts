@@ -31,6 +31,10 @@ export class Epreuve {
   description: String;
   distance: Number;
   maxinscription: Number;
+  recompense: String;
+  service: String;
+  place_depart: String;
+  hour_depart: String;
   prices: Price[];
 }
   

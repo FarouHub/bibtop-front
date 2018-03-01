@@ -1,11 +1,12 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MatSliderModule } from '@angular/material/slider';
 import { Epreuve } from '../epreuve';
 import { Search, DistanceFilter, TypeFilter } from '../search';
 import { Ville } from '../ville';
 import { EpreuveService } from '../epreuve.service';
 import { VilleService } from '../ville.service';
+
+import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-courses',
@@ -29,10 +30,11 @@ export class CoursesComponent implements OnInit {
     start_price: null,
     end_price: null,
     distance: {
-      min: 1,
-      max: 50, 
+      min: 0,
+      max: 200, 
       step: 1, 
-      value: 50,
+      valueMin: 0,
+      valueMax: 200,
       start_distance: 0,
       end_distance: null
     },
@@ -48,7 +50,8 @@ export class CoursesComponent implements OnInit {
   constructor(
     private epreuveService: EpreuveService, 
     private villeService: VilleService,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private modalService: NgbModal) { }
 
   ngOnInit() {
     let searchRequest = this.route.snapshot.paramMap.get('search');
@@ -61,6 +64,15 @@ export class CoursesComponent implements OnInit {
     this.getEpreuves();
   }
 
+  /**
+   * 
+   * @param content Manage the modal
+   */
+  open(content) {
+    this.modalService.open(content);
+  }
+
+
   /* Management of the google map API */
 
   /**
@@ -70,6 +82,7 @@ export class CoursesComponent implements OnInit {
   updateSearch(changedCenter){
     this.search.lat = changedCenter.lat;
     this.search.long = changedCenter.lng;
+    console.log('updateSearch');
   }
 
   /**
@@ -78,6 +91,7 @@ export class CoursesComponent implements OnInit {
    */
   updateZoom(changedZoom){
     this.search.zoom = changedZoom;
+    console.log('updateZoom');
   }
 
   /** 
@@ -85,6 +99,7 @@ export class CoursesComponent implements OnInit {
   */
   mapDragEnd() {
     this.getEpreuves();
+    console.log('mapDragEnd');
   }
   
   getEpreuves(): void {
@@ -97,11 +112,14 @@ export class CoursesComponent implements OnInit {
       }
       
       this.epreuves = epreuves;
-	  });
+    });
+    
+    console.log('getEpreuves');
   }
 
   refrechSearch(): void{
     this.getEpreuves();
+    console.log('refrechSearch');
   }
   
   getFindPosition(): void {
@@ -119,19 +137,22 @@ export class CoursesComponent implements OnInit {
         this.search.zoom = 10;
         this.getEpreuves();
       }
-
     });
+
+    console.log('getFindPosition');
   }
 
   cleanDateFilter(): void {
     this.search.start_date = null;
     this.search.end_date = null;
     this.getEpreuves();
+    console.log('cleanDateFilter');
   }
 
   cleanDistanceFilter(): void {
-    this.search.distance.value = this.search.distance.max;
+    this.search.distance.valueMax = this.search.distance.max;
     this.getEpreuves();
+    console.log('cleanDistanceFilter');
   }
 
   cleanTypeFilter(): void {
@@ -140,11 +161,18 @@ export class CoursesComponent implements OnInit {
     this.search.types.bikeandrun = false;
     this.search.types.route = false;
     this.getEpreuves();
+    console.log('cleanTypeFilter');
   }
 
   getFormatName(input): String {
+    console.log('getFormatName');
     let result = input.normalize('NFD').replace(/[\u0300-\u036f]/gm, "");
     result = result.replace(/\W/gm, "");
     return result.toUpperCase();
+    
+  }
+
+  printDebug(): void {
+    console.log(this.epreuves);
   }
 }

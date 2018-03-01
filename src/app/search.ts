@@ -13,9 +13,10 @@ export class Search {
 
 export class DistanceFilter {
   min: Number;
-  max: Number; 
+  max: Number;
   step: Number; 
-  value: Number;
+  valueMin: Number;
+  valueMax: Number;
   start_distance: Number;
   end_distance: Number;
 }
