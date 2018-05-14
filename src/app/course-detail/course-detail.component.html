@@ -52,9 +52,9 @@
                 <div class="col">
                     <hr/>
                     <span *ngIf="epreuve === undefined || epreuve.description === undefined">Pas de description de disponible.</span>
-                    <span *ngIf="epreuve !== undefined && epreuve.description !== undefined">{{ epreuve.description }}</span>
-                    <!--p class="my-0">Lieu de départ: {{ epreuve.place_depart }} </p>
-                    <p class="my-0">Heure de départ: {{ epreuve.hour_depart }} </p-->
+                    <span *ngIf="epreuve !== undefined && epreuve.description !== undefined">{{ epreuve.description }}</span><br/><br/>
+                    <p class="my-0">Lieu de départ: {{ epreuve?.place_depart }} </p>
+                    <p class="my-0">Heure de départ: {{ epreuve?.hour_depart }} </p>
                 </div>
             </div>
             <div class="row mb-3">
@@ -111,7 +111,7 @@
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item mx-0 px-0">
-                        <ul class="list-group" *ngIf="epreuve !== undefined && epreuve.prices !== undefined && epreuve.prices.length > 1">
+                        <ul class="list-group" *ngIf="epreuve !== undefined && epreuve.prices !== undefined && epreuve.prices.length >= 1">
                             <li class="list-group-item border-0" *ngFor="let price of epreuve.prices">
                                 <span *ngIf="price.type == 'all'">Prix: {{ price.prix }} € </span>
                                 <span *ngIf="price.type == 'licence'">Prix FFA: {{ price.prix }} €</span>
