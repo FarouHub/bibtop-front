@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Epreuve } from '../epreuve';
 import { Search, DistanceFilter, TypeFilter } from '../search';
@@ -6,7 +6,7 @@ import { Ville } from '../ville';
 import { EpreuveService } from '../epreuve.service';
 import { VilleService } from '../ville.service';
 
-import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-courses',
@@ -16,7 +16,7 @@ import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 
 export class CoursesComponent implements OnInit {
   
-  //Coordonnees par defaut 
+  // Coordonnees par defaut 
   search: Search = {
     input: '',
     types: {
@@ -105,11 +105,14 @@ export class CoursesComponent implements OnInit {
   getEpreuves(): void {
     this.epreuveService.getEpreuves(this.search).subscribe(epreuves => {
       this.markers = [];
+    
       let i = 0;
       for(let tmpEpreuve of epreuves){
         this.markers[i] = {lat: tmpEpreuve.lat , lng: tmpEpreuve.long, title: tmpEpreuve.title};
+        
         i++;
       }
+      
       
       this.epreuves = epreuves;
     });
@@ -123,6 +126,9 @@ export class CoursesComponent implements OnInit {
   }
   
   getFindPosition(): void {
+    console.log('getFindPosition');
+
+    // position par defaut paris
     if(this.search.input == ''){
       this.search.lat = 48.866;
       this.search.long = 2.333;
@@ -136,10 +142,10 @@ export class CoursesComponent implements OnInit {
         this.search.long = ville[0].LONG;
         this.search.zoom = 10;
         this.getEpreuves();
+      } else {
+        console.log('Ville introuvable');
       }
     });
-
-    console.log('getFindPosition');
   }
 
   cleanDateFilter(): void {
@@ -169,7 +175,6 @@ export class CoursesComponent implements OnInit {
     let result = input.normalize('NFD').replace(/[\u0300-\u036f]/gm, "");
     result = result.replace(/\W/gm, "");
     return result.toUpperCase();
-    
   }
 
   printDebug(): void {

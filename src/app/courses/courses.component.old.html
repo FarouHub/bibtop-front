@@ -134,27 +134,22 @@
 
 <div class="container-fluid margin-menu-height-sm margin-menu-height">
   <div class="row">
-    <div class="col-12 col-md-6 col-lg-6">
+    <div class="col-12 col-md-6 col-lg-8">
       <h2>Les Courses</h2>
       <div class="row" *ngIf="epreuves !== undefined && epreuves.length != 0">
-        <mat-card *ngFor="let epreuve of epreuves">
-          <mat-card-header>
-            <div mat-card-avatar class="header-image"></div>
-            <mat-card-title>{{ epreuve.title }} - {{ epreuve.distance }} km</mat-card-title>
-            <mat-card-subtitle>{{ epreuve.start_date | date :  "dd/MM/y" }}</mat-card-subtitle>
-          </mat-card-header>
-          <mat-card-content>
-            <p>
-              {{ epreuve.type }} - {{ epreuve.distance }} km
-            </p>
-          </mat-card-content>
-          <mat-card-actions>
-            <button *ngIf="search.input !== ''" routerLink="/courses/search/{{search.input}}/{{epreuve._id}}" mat-button>VIEW</button>
-            <button *ngIf="search.input === ''" routerLink="/courses/{{epreuve._id}}" mat-button>VIEW</button>
-            <button mat-button>LIKE</button>
-            <button mat-button>SHARE</button>
-          </mat-card-actions>
-        </mat-card>
+        <div class="col-12 col-md-12 col-lg-6 col-xl-3" *ngFor="let epreuve of epreuves">
+          <div class="card mb-2 border-0">
+            <!--img class="card-img-top" src="assets/images/cover/running{{epreuve.random}}.jpg" alt="Card image cap"-->
+            <div class="card-body pl-1 pt-0 pb-2">
+              <p class="m-0 p-0"><small>{{ epreuve.start_date | date :  "dd/MM/y" }}</small></p>
+              <h6 class="card-title m-0 p-0">
+                <a *ngIf="search.input !== ''" routerLink="/courses/search/{{search.input}}/{{epreuve._id}}">{{ epreuve.title }} - {{ epreuve.distance }} km</a>
+                <a *ngIf="search.input === ''" routerLink="/courses/{{epreuve._id}}">{{ epreuve.title }} - {{ epreuve.distance }} km</a>
+              </h6>
+              <p class="card-text p-0"><small>{{ epreuve.commune }}</small></p>
+            </div>
+          </div>
+        </div>
       </div>
       <!-- When no result -->
       <div class="row" *ngIf="epreuves !== undefined && epreuves.length == 0">
@@ -182,9 +177,9 @@
       </div>
     </div>
     <!-- Google Map -->
-    <div style="height: 100%" class="col-md-6 col-lg-6 d-none d-md-block d-md-fixed d-lg-fixed d-lg-block">
-      <div style="height: 100%" class="row w-100">
-        <div style="height: 100%" class="col">
+    <div class="col-md-6 col-lg-4 d-none d-md-block d-md-fixed d-lg-fixed d-lg-block">
+      <div class="row w-100">
+        <div class="col">
           <agm-map [latitude]="search.lat" [longitude]="search.long" [zoom]="search.zoom" [usePanning]="false" (zoomChange)="updateZoom($event)" (centerChange)="updateSearch($event)" (idle)="mapDragEnd()">
             <agm-marker *ngFor="let data of markers" [latitude]="data.lat" [longitude]="data.lng">
               <agm-info-window>
